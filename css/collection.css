@@ -4,30 +4,40 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: #f5f5f5;
-}
-
 .top-bar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    justify-content: space-between; /* Knoppen links en rechts */
+    padding: 10px;
     background: white;
     border-bottom: 1px solid #ddd;
+    position: relative;
 }
 
 .profile-icon {
-    width: 50px;
-    height: 50px;
-    background: gray;
-    border-radius: 50%;
-    position: relative;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%);
 }
+
+.profile-icon img {
+    width: 90px;
+    height: 55px;
+    object-fit: cover; /* Zorgt ervoor dat de afbeelding goed past */
+    border-radius: 90%; /* Maakt het rond als een profielicoon */
+}
+
+.side-btn {
+    width: 60px; /* Maak rechthoekig zoals in de afbeelding */
+    height: 30px;
+    background: lightgray;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 .gallery {
     display: grid;
@@ -66,3 +76,4 @@ body {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
+
