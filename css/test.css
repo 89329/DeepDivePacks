@@ -1,0 +1,84 @@
+/* Algemene reset voor marges en padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff; /* Lichte oceaanblauwe achtergrond */
+    padding: 20px;
+}
+
+/* Stijl voor de container van alle kaarten */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Stijl voor elke kaart */
+.card {
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 250px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect voor kaarten */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Afbeelding stijl */
+.card-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+/* Naam van het dier */
+.card-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2f4f4f; /* Donkerblauwe kleur */
+    margin-bottom: 10px;
+}
+
+/* Beschrijving tekststijl */
+.card-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Lijst van extra info zoals leefgebied, dieet, etc. */
+.card-stats {
+    list-style-type: none;
+    font-size: 14px;
+    color: #777;
+}
+
+.card-stats li {
+    margin-bottom: 5px;
+}
+
+.card-stats li strong {
+    color: #2f4f4f;
+}
+
+/* Voor de container waarin de kaarten staan */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 30px;
+}

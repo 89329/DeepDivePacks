@@ -1,8 +1,8 @@
 <?php
 // Database-instellingen
 $servername = "localhost";  // Verander naar jouw database server
-$username = "root";         // Jouw gebruikersnaam (standaard is 'root' bij lokale servers)
-$password = "";             // Wachtwoord (standaard is leeg bij lokale servers)
+$username = "DB089329_";         // Jouw gebruikersnaam (standaard is 'root' bij lokale servers)
+$password = "PokemonGodd18";             // Wachtwoord (standaard is leeg bij lokale servers)
 $dbname = "oceaan_game";    // De naam van je database
 
 // Maak verbinding met de database
