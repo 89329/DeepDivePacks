@@ -3,7 +3,6 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const { Server } = require('socket.io');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
@@ -13,6 +12,9 @@ const sessionConfig = require('./middleware/session');
 const authenticateUser = require('./middleware/auth');
 const { cookieParserMiddleware, csrfProtection, csrfTokenEndpoint } = require('./middleware/csrf');
 const sanitizeMiddleware = require('./middleware/sanitize');
+
+// Import Socket.IO initialization
+const initializeSocket = require('./sockets');
 
 /**
  * Express application instance.
@@ -26,11 +28,8 @@ const app = express();
  */
 const server = http.createServer(app);
 
-/**
- * Socket.IO server instance.
- * @type {import('socket.io').Server}
- */
-const io = new Server(server);
+// Initialize Socket.IO
+const io = initializeSocket(server, sessionConfig);
 
 // Ensure the database directory exists
 const dbDir = path.join(__dirname, 'database');
@@ -146,18 +145,6 @@ app.post('/api/logout', (req, res) => {
 // Routes
 const authRoutes = require('./routes/auth')(dbInterface);
 app.use('/api', authRoutes);
-
-/**
- * Socket.IO connection handler.
- * Manages real-time connections and events.
- */
-io.on('connection', (socket) => {
-    console.log('User connected:', socket.id);
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
-    });
-});
 
 // Cleanup on server shutdown
 process.on('SIGINT', () => {
