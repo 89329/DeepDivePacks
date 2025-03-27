@@ -27,11 +27,11 @@ if (loginForm) {
                 // Redirect to game page
                 window.location.href = '/game.html';
             } else {
-                alert(data.error || 'Login failed');
+                await customPopup.show(data.error || 'Login failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred during login');
+            await customPopup.show('An error occurred during login');
         }
     });
 }
@@ -48,7 +48,7 @@ if (registerForm) {
         const confirmPassword = document.getElementById('confirm-password').value;
 
         if (password !== confirmPassword) {
-            alert('Passwords do not match');
+            await customPopup.show('Passwords do not match');
             return;
         }
 
@@ -64,14 +64,14 @@ if (registerForm) {
             const data = await response.json();
 
             if (response.ok) {
-                alert('Registration successful! Please login.');
+                await customPopup.show('Registration successful! Please login.');
                 window.location.href = '/login.html';
             } else {
-                alert(data.error || 'Registration failed');
+                await customPopup.show(data.error || 'Registration failed');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred during registration');
+            await customPopup.show('An error occurred during registration');
         }
     });
 } 
