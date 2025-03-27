@@ -13,6 +13,59 @@ async function getCsrfToken() {
     }
 }
 
+// Check session status
+async function checkSession() {
+    try {
+        const response = await fetch('/api/check-session');
+        const data = await response.json();
+
+        if (data.isAuthenticated) {
+            // Redirect to home if already logged in
+            if (window.location.pathname === '/login.html' || window.location.pathname === '/register.html') {
+                window.location.href = '/';
+            }
+            return data.user;
+        } else {
+            // Clear any stored user data
+            localStorage.removeItem('user');
+            // Redirect to login if on a protected page
+            if (window.location.pathname !== '/login.html' &&
+                window.location.pathname !== '/register.html' &&
+                window.location.pathname !== '/') {
+                window.location.href = '/login.html';
+            }
+            return null;
+        }
+    } catch (error) {
+        console.error('Error checking session:', error);
+        return null;
+    }
+}
+
+// Logout function
+async function logout() {
+    try {
+        const csrfToken = await getCsrfToken();
+        const response = await fetch('/api/logout', {
+            method: 'POST',
+            headers: {
+                'CSRF-Token': csrfToken
+            }
+        });
+
+        if (response.ok) {
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        } else {
+            const data = await response.json();
+            await customPopup.show(data.error || 'Logout failed');
+        }
+    } catch (error) {
+        console.error('Error during logout:', error);
+        await customPopup.show('An error occurred during logout');
+    }
+}
+
 // Handle login form submission
 const loginForm = document.querySelector('.login-form');
 if (loginForm) {
@@ -36,22 +89,23 @@ if (loginForm) {
             const data = await response.json();
 
             if (response.ok) {
-                // Store user info in localStorage
-                localStorage.setItem('user', JSON.stringify(data.user));
-                // Redirect to game page
-                window.location.href = '/game.html';
+                // Store minimal user info in localStorage for UI purposes only
+                localStorage.setItem('user', JSON.stringify({
+                    username: data.user.username,
+                    id: data.user.id
+                }));
+                window.location.href = '/';
             } else {
                 if (data.errors) {
-                    // Display validation errors
                     const errorMessages = data.errors.map(err => err.msg).join('\n');
-                    alert(errorMessages);
+                    await customPopup.show(errorMessages);
                 } else {
-                    alert(data.error || 'Login failed');
+                    await customPopup.show(data.error || 'Login failed');
                 }
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred during login');
+            await customPopup.show('An error occurred during login');
         }
     });
 }
@@ -68,7 +122,7 @@ if (registerForm) {
         const confirmPassword = document.getElementById('confirm-password').value;
 
         if (password !== confirmPassword) {
-            alert('Passwords do not match');
+            await customPopup.show('Passwords do not match');
             return;
         }
 
@@ -86,20 +140,22 @@ if (registerForm) {
             const data = await response.json();
 
             if (response.ok) {
-                alert('Registration successful! Please login.');
+                await customPopup.show('Registration successful! Please login.');
                 window.location.href = '/login.html';
             } else {
                 if (data.errors) {
-                    // Display validation errors
                     const errorMessages = data.errors.map(err => err.msg).join('\n');
-                    alert(errorMessages);
+                    await customPopup.show(errorMessages);
                 } else {
-                    alert(data.error || 'Registration failed');
+                    await customPopup.show(data.error || 'Registration failed');
                 }
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred during registration');
+            await customPopup.show('An error occurred during registration');
         }
     });
-} 
+}
+
+// Check session status on page load
+document.addEventListener('DOMContentLoaded', checkSession); 

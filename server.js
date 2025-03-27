@@ -3,13 +3,16 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcrypt');
 const cors = require('cors');
-const session = require('express-session');
 const { Server } = require('socket.io');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
-const csrf = require('csurf');
-const { body, validationResult } = require('express-validator');
+
+// Import middleware
+const sessionConfig = require('./middleware/session');
+const authenticateUser = require('./middleware/auth');
+const { cookieParserMiddleware, csrfProtection, csrfTokenEndpoint } = require('./middleware/csrf');
+const sanitizeMiddleware = require('./middleware/sanitize');
 
 const app = express();
 const server = http.createServer(app);
@@ -65,41 +68,38 @@ const dbInterface = {
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict'
-    }
-}));
-
-// CSRF protection middleware
-const csrfProtection = csrf({ cookie: true });
+app.use(cookieParserMiddleware);
+app.use(sessionConfig);
 app.use(csrfProtection);
+app.use(sanitizeMiddleware);
 
-// Input sanitization middleware
-const sanitizeInput = (input) => {
-    if (typeof input !== 'string') return input;
-    return input.trim()
-        .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
-        .replace(/['"]/g, '') // Remove quotes
-        .replace(/[;]/g, ''); // Remove semicolons to prevent SQL injection
-};
-
-app.use((req, res, next) => {
-    if (req.body) {
-        Object.keys(req.body).forEach(key => {
-            req.body[key] = sanitizeInput(req.body[key]);
+// Session check endpoint
+app.get('/api/check-session', (req, res) => {
+    if (req.session.userId) {
+        res.json({
+            isAuthenticated: true,
+            user: {
+                id: req.session.userId,
+                username: req.session.username
+            }
         });
+    } else {
+        res.json({ isAuthenticated: false });
     }
-    next();
 });
 
 // CSRF token endpoint
-app.get('/api/csrf-token', (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
+app.get('/api/csrf-token', csrfTokenEndpoint);
+
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error during logout' });
+        }
+        res.clearCookie('connect.sid'); // Clear session cookie
+        res.json({ message: 'Logged out successfully' });
+    });
 });
 
 // Routes
