@@ -1,0 +1,30 @@
+{
+  "name": "deepdivepacks",
+  "version": "1.0.0",
+  "description": "```\r src/\r ├── js/         # JavaScript files\r ├── css/        # CSS stylesheets\r ├── assets/     # Static assets\r │   ├── images/\r ```",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/89329/DeepDivePacks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/89329/DeepDivePacks/issues"
+  },
+  "homepage": "https://github.com/89329/DeepDivePacks#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "socket.io": "^4.8.1",
+    "sqlite3": "^5.1.7"
+  }
+}
