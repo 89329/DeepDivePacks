@@ -18,7 +18,7 @@ const registerValidation = [
     body('email')
         .trim()
         .isEmail()
-        .normalizeEmail()
+        .normalizeEmail({ gmail_remove_dots: false })
         .withMessage('Invalid email address'),
     body('password')
         .isLength({ min: 6 })
@@ -27,15 +27,14 @@ const registerValidation = [
 
 /**
  * Validation rules for user login.
- * Validates email format and ensures password is not empty.
+ * Validates input as email or username and ensures password is not empty.
  * @type {import('express-validator').ValidationChain[]}
  */
 const loginValidation = [
     body('email')
         .trim()
-        .isEmail()
-        .normalizeEmail()
-        .withMessage('Invalid email address'),
+        .notEmpty()
+        .withMessage('Username or email is required'),
     body('password')
         .notEmpty()
         .withMessage('Password is required')
@@ -49,6 +48,62 @@ const loginValidation = [
  * @returns {express.Router} Configured Express router with auth routes
  */
 module.exports = (db) => {
+    /**
+     * POST /api/check-username
+     * Checks if a username is available (not already taken).
+     * @route POST /api/check-username
+     * @param {Object} req.body - Request body
+     * @param {string} req.body.username - Username to check
+     * @returns {Object} JSON response with availability status
+     */
+    router.post('/check-username', async (req, res) => {
+        try {
+            const { username } = req.body;
+
+            if (!username) {
+                return res.status(400).json({ error: 'Username is required' });
+            }
+
+            const existingUser = await db.all(
+                'SELECT * FROM users WHERE username = ?',
+                [username]
+            );
+
+            res.json({ available: existingUser.length === 0 });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    });
+
+    /**
+     * POST /api/check-email
+     * Checks if an email address is available (not already registered).
+     * @route POST /api/check-email
+     * @param {Object} req.body - Request body
+     * @param {string} req.body.email - Email to check
+     * @returns {Object} JSON response with availability status
+     */
+    router.post('/check-email', async (req, res) => {
+        try {
+            const { email } = req.body;
+
+            if (!email) {
+                return res.status(400).json({ error: 'Email is required' });
+            }
+
+            const existingUser = await db.all(
+                'SELECT * FROM users WHERE email = ?',
+                [email]
+            );
+
+            res.json({ available: existingUser.length === 0 });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Server error' });
+        }
+    });
+
     /**
      * POST /api/register
      * Registers a new user with validation and password hashing.
@@ -68,14 +123,23 @@ module.exports = (db) => {
         try {
             const { username, email, password } = req.body;
 
-            // Check if user already exists
-            const existingUser = await db.all(
-                'SELECT * FROM users WHERE email = ? OR username = ?',
-                [email, username]
+            // Check if user already exists with more specific error messages
+            const existingUserByEmail = await db.all(
+                'SELECT * FROM users WHERE email = ?',
+                [email]
             );
 
-            if (existingUser.length > 0) {
-                return res.status(400).json({ error: 'User already exists' });
+            const existingUserByUsername = await db.all(
+                'SELECT * FROM users WHERE username = ?',
+                [username]
+            );
+
+            if (existingUserByEmail.length > 0 && existingUserByUsername.length > 0) {
+                return res.status(400).json({ error: 'Both username and email are already taken' });
+            } else if (existingUserByEmail.length > 0) {
+                return res.status(400).json({ error: 'Email address is already registered' });
+            } else if (existingUserByUsername.length > 0) {
+                return res.status(400).json({ error: 'Username is already taken' });
             }
 
             // Hash password
@@ -96,10 +160,10 @@ module.exports = (db) => {
 
     /**
      * POST /api/login
-     * Authenticates a user and creates a session.
+     * Authenticates a user with username or email and creates a session.
      * @route POST /api/login
      * @param {Object} req.body - Request body
-     * @param {string} req.body.email - User's email address
+     * @param {string} req.body.email - User's email address or username
      * @param {string} req.body.password - User's password
      * @returns {Object} JSON response with user data or error
      */
@@ -111,10 +175,13 @@ module.exports = (db) => {
 
         try {
             const { email, password } = req.body;
+            const isEmail = email.includes('@');
 
-            // Find user
+            // Find user by email or username
             const users = await db.all(
-                'SELECT * FROM users WHERE email = ?',
+                isEmail
+                    ? 'SELECT * FROM users WHERE email = ?'
+                    : 'SELECT * FROM users WHERE username = ?',
                 [email]
             );
 

@@ -7,22 +7,73 @@
     <meta name="description" content="DeepDive Packs - Deep Sea Creature Card Game">
     <title>DeepDive Packs</title>
     <link rel="stylesheet" href="css/main-layout.css">
+    <link rel="stylesheet" href="css/popup.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
+    <div class="profile-island-wrapper">
+        <div class="user-controls">
+            <a id="profile-island" class="profile-island hidden" href="/profile/">
+                <span class="username-display"></span>
+                <div class="profile-avatar">
+                    <div class="avatar-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </a>
+            <button id="logout-btn" class="logout-btn hidden" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+        <div id="auth-buttons" class="auth-buttons">
+            <a href="login.html" class="auth-btn-small"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="register.html" class="auth-btn-small"><i class="fas fa-user-plus"></i> Register</a>
+        </div>
+    </div>
+
     <main class="landing-container">
         <section class="landing-content">
-            <h1 class="landing-title">DeepDive Packs</h1>
-            <p class="landing-subtitle">Explore the mysteries of the deep</p>
+            <div class="ocean-animation">
+                <div class="bubbles"></div>
+                <div class="jellyfish"></div>
+            </div>
+
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <h1 class="landing-title">DeepDive Packs</h1>
+            </div>
+
+            <p class="landing-subtitle">Collect rare deep sea creatures and explore the mysteries of the ocean</p>
+
+            <div class="feature-highlights">
+                <div class="feature">
+                    <i class="fas fa-id-card"></i>
+                    <span>Collect Unique Cards</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Play Games</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-trophy"></i>
+                    <span>Earn Rewards</span>
+                </div>
+            </div>
+
             <div class="landing-buttons">
-                <a href="login.html" class="btn btn--primary">Login</a>
-                <a href="register.html" class="btn btn--secondary">Register</a>
+                <a href="login.html" class="btn btn--primary"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="register.html" class="btn btn--secondary"><i class="fas fa-user-plus"></i> Register</a>
             </div>
         </section>
     </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/profile-island.js"></script>
 </body>
 
 </html>

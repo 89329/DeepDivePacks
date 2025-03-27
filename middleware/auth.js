@@ -1,18 +1,38 @@
 /**
- * Authentication middleware to protect routes that require user authentication.
- * Checks if a user is logged in by verifying the presence of userId in the session.
+ * Authentication middleware functions for protecting routes.
+ * @module middleware/auth
+ */
+
+/**
+ * Middleware for API routes that require authentication.
+ * Returns 401 status if user is not authenticated.
  * 
  * @param {import('express').Request} req - Express request object
  * @param {import('express').Response} res - Express response object
  * @param {import('express').NextFunction} next - Express next middleware function
  * @returns {void}
- * @throws {Object} Returns 401 status with error message if authentication fails
  */
-const authenticateUser = (req, res, next) => {
+const authenticateApiUser = (req, res, next) => {
     if (!req.session.userId) {
         return res.status(401).json({ error: 'Authentication required' });
     }
     next();
 };
 
-module.exports = authenticateUser; 
+/**
+ * Middleware for page routes that require authentication.
+ * Redirects to login page if user is not authenticated.
+ * 
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ * @param {import('express').NextFunction} next - Express next middleware function
+ * @returns {void}
+ */
+const authenticatePageUser = (req, res, next) => {
+    if (!req.session.userId) {
+        return res.redirect('/login.html');
+    }
+    next();
+};
+
+module.exports = { authenticateApiUser, authenticatePageUser }; 

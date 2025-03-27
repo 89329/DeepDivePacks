@@ -26,12 +26,11 @@ const authMiddleware = (socket, next) => {
 
 /**
  * Wraps Express middleware for Socket.IO
- * @param {Function} middleware - Express middleware to wrap
- * @returns {Function} Wrapped middleware for Socket.IO
+ * @param {import('express').RequestHandler} middleware - Express middleware to wrap
+ * @returns {(socket: import('socket.io').Socket, next: Function) => void} Socket.IO middleware
  */
-const wrapMiddleware = middleware => (socket, next) => middleware(socket.request, {}, next);
+const wrapMiddleware = (middleware) => (socket, next) => {
+    middleware(socket.request, {}, next);
+};
 
-module.exports = {
-    authMiddleware,
-    wrapMiddleware
-}; 
+module.exports = { authMiddleware, wrapMiddleware }; 

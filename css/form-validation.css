@@ -1,0 +1,109 @@
+/*
+ * Form Validation Styles
+ * This stylesheet contains styles for form validation including:
+ * - Validation feedback messages
+ * - Input field highlighting
+ * - Status indicators
+ * - Animation effects
+ */
+
+/* ===== VALIDATION FEEDBACK MESSAGES ===== */
+.validation-feedback {
+    font-size: 0.85rem;
+    padding-top: 5px;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.validation-feedback.valid {
+    color: #4CAF50;
+}
+
+.validation-feedback.invalid {
+    color: #F44336;
+}
+
+.validation-feedback.checking {
+    color: #888;
+}
+
+/* ===== FORM FIELDS STYLING ===== */
+.form-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.form-group input.valid-input {
+    border-color: #4CAF50;
+    background-color: rgba(76, 175, 80, 0.05);
+    transition: all 0.3s ease;
+}
+
+.form-group input.invalid-input {
+    border-color: #F44336;
+    background-color: rgba(244, 67, 54, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* ===== GENERAL FORM FEEDBACK ===== */
+#form-feedback,
+#login-feedback {
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-weight: 500;
+    width: 100%;
+}
+
+#form-feedback.valid,
+#login-feedback.valid {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-left: 3px solid #4CAF50;
+}
+
+#form-feedback.invalid,
+#login-feedback.invalid {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-left: 3px solid #F44336;
+}
+
+/* ===== VALIDATION ICONS ===== */
+.validation-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.validation-icon.valid {
+    color: #4CAF50;
+}
+
+.validation-icon.invalid {
+    color: #F44336;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

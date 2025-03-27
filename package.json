@@ -1,7 +1,7 @@
 {
   "name": "deepdivepacks",
   "version": "1.0.0",
-  "description": "```\r src/\r ├── js/         # JavaScript files\r ├── css/        # CSS stylesheets\r ├── assets/     # Static assets\r │   ├── images/\r ```",
+  "description": "Open packs full of ocean creatures",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -28,6 +28,7 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
+    "multer": "^1.4.5-lts.2",
     "socket.io": "^4.8.1",
     "sqlite3": "^5.1.7"
   },

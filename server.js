@@ -9,7 +9,7 @@ const fs = require('fs');
 
 // Import middleware
 const sessionConfig = require('./middleware/session');
-const authenticateUser = require('./middleware/auth');
+const { authenticateApiUser, authenticatePageUser } = require('./middleware/auth');
 const { cookieParserMiddleware, csrfProtection, csrfTokenEndpoint } = require('./middleware/csrf');
 const sanitizeMiddleware = require('./middleware/sanitize');
 
@@ -35,6 +35,12 @@ const io = initializeSocket(server, sessionConfig);
 const dbDir = path.join(__dirname, 'database');
 if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir);
+}
+
+// Ensure the public profile directory exists
+const profileDir = path.join(__dirname, 'public', 'profile');
+if (!fs.existsSync(profileDir)) {
+    fs.mkdirSync(profileDir, { recursive: true });
 }
 
 /**
@@ -97,7 +103,26 @@ const dbInterface = {
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files with proper MIME types
+app.use('/css', express.static(path.join(__dirname, 'css'), {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.css')) {
+            res.setHeader('Content-Type', 'text/css');
+        }
+    }
+}));
+app.use('/js', express.static(path.join(__dirname, 'js'), {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        }
+    }
+}));
+// Serve static files from the public directory for uploaded content
+app.use('/profile', express.static(path.join(__dirname, 'public', 'profile')));
 app.use(express.static(path.join(__dirname)));
+
 app.use(cookieParserMiddleware);
 app.use(sessionConfig);
 app.use(csrfProtection);
@@ -144,7 +169,37 @@ app.post('/api/logout', (req, res) => {
 
 // Routes
 const authRoutes = require('./routes/auth')(dbInterface);
+const profileRoutes = require('./routes/profile')(dbInterface);
+
+// Public API routes
 app.use('/api', authRoutes);
+app.use('/api/profile', profileRoutes);
+
+// Public pages
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'login.html'));
+});
+
+app.get('/register.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'register.html'));
+});
+
+app.get('/profile/:username', (req, res) => {
+    res.sendFile(path.join(__dirname, 'profile.html'));
+});
+
+// Protected pages (require authentication)
+app.get('/settings', authenticatePageUser, (req, res) => {
+    res.sendFile(path.join(__dirname, 'settings.html'));
+});
+
+app.get('/inventory', authenticatePageUser, (req, res) => {
+    res.sendFile(path.join(__dirname, 'inventory.html'));
+});
 
 // Cleanup on server shutdown
 process.on('SIGINT', () => {
