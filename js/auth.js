@@ -1,7 +1,12 @@
-// Socket.io connection
+/** @type {import('socket.io-client').Socket} */
 const socket = io();
 
-// Function to get CSRF token
+/**
+ * Fetches a CSRF token from the server for secure form submissions.
+ * @async
+ * @returns {Promise<string>} The CSRF token
+ * @throws {Error} If the token fetch fails
+ */
 async function getCsrfToken() {
     try {
         const response = await fetch('/api/csrf-token');
@@ -13,7 +18,14 @@ async function getCsrfToken() {
     }
 }
 
-// Check session status
+/**
+ * Checks the current user's authentication status.
+ * Handles redirects based on authentication state and current page.
+ * @async
+ * @returns {Promise<Object|null>} User object if authenticated, null otherwise
+ * @property {string} user.username - The username of the authenticated user
+ * @property {string} user.id - The unique identifier of the authenticated user
+ */
 async function checkSession() {
     try {
         const response = await fetch('/api/check-session');
@@ -42,7 +54,12 @@ async function checkSession() {
     }
 }
 
-// Logout function
+/**
+ * Logs out the current user and redirects to the login page.
+ * Clears local storage and invalidates the server session.
+ * @async
+ * @returns {Promise<void>}
+ */
 async function logout() {
     try {
         const csrfToken = await getCsrfToken();
@@ -69,6 +86,11 @@ async function logout() {
 // Handle login form submission
 const loginForm = document.querySelector('.login-form');
 if (loginForm) {
+    /**
+     * Login form submission handler.
+     * Authenticates user credentials and manages the login process.
+     * @param {SubmitEvent} e - The form submission event
+     */
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -113,6 +135,11 @@ if (loginForm) {
 // Handle registration form submission
 const registerForm = document.querySelector('.register-form');
 if (registerForm) {
+    /**
+     * Registration form submission handler.
+     * Creates new user accounts and handles the registration process.
+     * @param {SubmitEvent} e - The form submission event
+     */
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 

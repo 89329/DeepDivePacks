@@ -3,7 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
-// Validation rules
+/**
+ * Validation rules for user registration.
+ * Enforces username format, email validity, and password strength.
+ * @type {import('express-validator').ValidationChain[]}
+ */
 const registerValidation = [
     body('username')
         .trim()
@@ -21,6 +25,11 @@ const registerValidation = [
         .withMessage('Password must be at least 6 characters long')
 ];
 
+/**
+ * Validation rules for user login.
+ * Validates email format and ensures password is not empty.
+ * @type {import('express-validator').ValidationChain[]}
+ */
 const loginValidation = [
     body('email')
         .trim()
@@ -32,8 +41,24 @@ const loginValidation = [
         .withMessage('Password is required')
 ];
 
+/**
+ * Creates and configures authentication routes.
+ * @param {Object} db - Database interface object
+ * @param {Function} db.all - Function to execute SELECT queries
+ * @param {Function} db.run - Function to execute INSERT/UPDATE/DELETE queries
+ * @returns {express.Router} Configured Express router with auth routes
+ */
 module.exports = (db) => {
-    // Register route
+    /**
+     * POST /api/register
+     * Registers a new user with validation and password hashing.
+     * @route POST /api/register
+     * @param {Object} req.body - Request body
+     * @param {string} req.body.username - User's desired username
+     * @param {string} req.body.email - User's email address
+     * @param {string} req.body.password - User's password
+     * @returns {Object} JSON response with success message or error
+     */
     router.post('/register', registerValidation, async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -69,7 +94,15 @@ module.exports = (db) => {
         }
     });
 
-    // Login route
+    /**
+     * POST /api/login
+     * Authenticates a user and creates a session.
+     * @route POST /api/login
+     * @param {Object} req.body - Request body
+     * @param {string} req.body.email - User's email address
+     * @param {string} req.body.password - User's password
+     * @returns {Object} JSON response with user data or error
+     */
     router.post('/login', loginValidation, async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

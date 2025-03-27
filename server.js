@@ -14,8 +14,22 @@ const authenticateUser = require('./middleware/auth');
 const { cookieParserMiddleware, csrfProtection, csrfTokenEndpoint } = require('./middleware/csrf');
 const sanitizeMiddleware = require('./middleware/sanitize');
 
+/**
+ * Express application instance.
+ * @type {import('express').Application}
+ */
 const app = express();
+
+/**
+ * HTTP server instance.
+ * @type {import('http').Server}
+ */
 const server = http.createServer(app);
+
+/**
+ * Socket.IO server instance.
+ * @type {import('socket.io').Server}
+ */
 const io = new Server(server);
 
 // Ensure the database directory exists
@@ -24,7 +38,10 @@ if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir);
 }
 
-// Database connection
+/**
+ * SQLite database connection.
+ * @type {import('sqlite3').Database}
+ */
 const dbPath = path.join(dbDir, 'deepdivepacks.db');
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
@@ -43,7 +60,12 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
-// Promisify database queries
+/**
+ * Promisified database query for SELECT operations.
+ * @param {string} sql - SQL query string
+ * @param {Array<any>} params - Query parameters
+ * @returns {Promise<Array<any>>} Query results
+ */
 const dbAll = (sql, params) => new Promise((resolve, reject) => {
     db.all(sql, params, (err, rows) => {
         if (err) reject(err);
@@ -51,6 +73,12 @@ const dbAll = (sql, params) => new Promise((resolve, reject) => {
     });
 });
 
+/**
+ * Promisified database query for INSERT/UPDATE/DELETE operations.
+ * @param {string} sql - SQL query string
+ * @param {Array<any>} params - Query parameters
+ * @returns {Promise<{lastID: number, changes: number}>} Query result info
+ */
 const dbRun = (sql, params) => new Promise((resolve, reject) => {
     db.run(sql, params, function (err) {
         if (err) reject(err);
@@ -58,7 +86,10 @@ const dbRun = (sql, params) => new Promise((resolve, reject) => {
     });
 });
 
-// Create database interface object
+/**
+ * Database interface object with promisified methods.
+ * @type {{all: typeof dbAll, run: typeof dbRun}}
+ */
 const dbInterface = {
     all: dbAll,
     run: dbRun
@@ -73,7 +104,12 @@ app.use(sessionConfig);
 app.use(csrfProtection);
 app.use(sanitizeMiddleware);
 
-// Session check endpoint
+/**
+ * GET /api/check-session
+ * Checks if user is authenticated and returns session information.
+ * @route GET /api/check-session
+ * @returns {Object} JSON response with authentication status and user info
+ */
 app.get('/api/check-session', (req, res) => {
     if (req.session.userId) {
         res.json({
@@ -91,13 +127,18 @@ app.get('/api/check-session', (req, res) => {
 // CSRF token endpoint
 app.get('/api/csrf-token', csrfTokenEndpoint);
 
-// Logout endpoint
+/**
+ * POST /api/logout
+ * Destroys the user session and clears session cookie.
+ * @route POST /api/logout
+ * @returns {Object} JSON response with success/error message
+ */
 app.post('/api/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ error: 'Error during logout' });
         }
-        res.clearCookie('connect.sid'); // Clear session cookie
+        res.clearCookie('connect.sid');
         res.json({ message: 'Logged out successfully' });
     });
 });
@@ -106,7 +147,10 @@ app.post('/api/logout', (req, res) => {
 const authRoutes = require('./routes/auth')(dbInterface);
 app.use('/api', authRoutes);
 
-// Socket.io connection handling
+/**
+ * Socket.IO connection handler.
+ * Manages real-time connections and events.
+ */
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 

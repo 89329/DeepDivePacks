@@ -1,8 +1,21 @@
+/**
+ * A custom popup component for displaying messages and alerts.
+ * Creates and manages a singleton popup instance for the entire application.
+ */
 class CustomPopup {
+    /**
+     * Creates a new CustomPopup instance.
+     * Initializes the popup DOM elements and event listeners.
+     */
     constructor() {
         this.createPopupElement();
     }
 
+    /**
+     * Creates and initializes the popup DOM elements.
+     * Sets up event listeners for closing the popup.
+     * @private
+     */
     createPopupElement() {
         // Create popup elements if they don't exist
         if (!document.querySelector('.popup-overlay')) {
@@ -30,6 +43,11 @@ class CustomPopup {
         this.messageEl = this.overlay.querySelector('.popup-message');
     }
 
+    /**
+     * Displays the popup with a message.
+     * @param {string} message - The message to display in the popup
+     * @returns {Promise<void>} Resolves when the popup is closed
+     */
     show(message) {
         this.messageEl.textContent = message;
         this.overlay.classList.add('active');
@@ -42,13 +60,18 @@ class CustomPopup {
         });
     }
 
+    /**
+     * Hides the popup.
+     * Removes the active class from the overlay.
+     */
     hide() {
         this.overlay.classList.remove('active');
     }
 }
 
-// Create a single instance for the entire application
+/** @type {CustomPopup} */
 const popup = new CustomPopup();
 
-// Export the instance
+// Export the instance as a global variable
+/** @type {CustomPopup} */
 window.customPopup = popup; 
