@@ -1,6 +1,18 @@
 // Socket.io connection
 const socket = io();
 
+// Function to get CSRF token
+async function getCsrfToken() {
+    try {
+        const response = await fetch('/api/csrf-token');
+        const data = await response.json();
+        return data.csrfToken;
+    } catch (error) {
+        console.error('Error fetching CSRF token:', error);
+        throw error;
+    }
+}
+
 // Handle login form submission
 const loginForm = document.querySelector('.login-form');
 if (loginForm) {
@@ -11,10 +23,12 @@ if (loginForm) {
         const password = document.getElementById('password').value;
 
         try {
+            const csrfToken = await getCsrfToken();
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': csrfToken
                 },
                 body: JSON.stringify({ email, password })
             });
@@ -27,11 +41,17 @@ if (loginForm) {
                 // Redirect to game page
                 window.location.href = '/game.html';
             } else {
-                await customPopup.show(data.error || 'Login failed');
+                if (data.errors) {
+                    // Display validation errors
+                    const errorMessages = data.errors.map(err => err.msg).join('\n');
+                    alert(errorMessages);
+                } else {
+                    alert(data.error || 'Login failed');
+                }
             }
         } catch (error) {
             console.error('Error:', error);
-            await customPopup.show('An error occurred during login');
+            alert('An error occurred during login');
         }
     });
 }
@@ -48,15 +68,17 @@ if (registerForm) {
         const confirmPassword = document.getElementById('confirm-password').value;
 
         if (password !== confirmPassword) {
-            await customPopup.show('Passwords do not match');
+            alert('Passwords do not match');
             return;
         }
 
         try {
+            const csrfToken = await getCsrfToken();
             const response = await fetch('/api/register', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'CSRF-Token': csrfToken
                 },
                 body: JSON.stringify({ username, email, password })
             });
@@ -64,14 +86,20 @@ if (registerForm) {
             const data = await response.json();
 
             if (response.ok) {
-                await customPopup.show('Registration successful! Please login.');
+                alert('Registration successful! Please login.');
                 window.location.href = '/login.html';
             } else {
-                await customPopup.show(data.error || 'Registration failed');
+                if (data.errors) {
+                    // Display validation errors
+                    const errorMessages = data.errors.map(err => err.msg).join('\n');
+                    alert(errorMessages);
+                } else {
+                    alert(data.error || 'Registration failed');
+                }
             }
         } catch (error) {
             console.error('Error:', error);
-            await customPopup.show('An error occurred during registration');
+            alert('An error occurred during registration');
         }
     });
 } 

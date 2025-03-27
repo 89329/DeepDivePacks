@@ -8,6 +8,8 @@ const { Server } = require('socket.io');
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
+const csrf = require('csurf');
+const { body, validationResult } = require('express-validator');
 
 const app = express();
 const server = http.createServer(app);
@@ -53,6 +55,12 @@ const dbRun = (sql, params) => new Promise((resolve, reject) => {
     });
 });
 
+// Create database interface object
+const dbInterface = {
+    all: dbAll,
+    run: dbRun
+};
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -61,79 +69,42 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict'
+    }
 }));
 
-// Routes
-app.post('/api/register', async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
+// CSRF protection middleware
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
 
-        // Check if user already exists
-        const existingUser = await dbAll(
-            'SELECT * FROM users WHERE email = ? OR username = ?',
-            [email, username]
-        );
+// Input sanitization middleware
+const sanitizeInput = (input) => {
+    if (typeof input !== 'string') return input;
+    return input.trim()
+        .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
+        .replace(/['"]/g, '') // Remove quotes
+        .replace(/[;]/g, ''); // Remove semicolons to prevent SQL injection
+};
 
-        if (existingUser.length > 0) {
-            return res.status(400).json({ error: 'User already exists' });
-        }
-
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert new user
-        await dbRun(
-            'INSERT INTO users (username, email, password, currency) VALUES (?, ?, ?, ?)',
-            [username, email, hashedPassword, 1000]
-        );
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
-    }
-});
-
-app.post('/api/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        // Find user
-        const users = await dbAll(
-            'SELECT * FROM users WHERE email = ?',
-            [email]
-        );
-
-        if (users.length === 0) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        const user = users[0];
-        const validPassword = await bcrypt.compare(password, user.password);
-
-        if (!validPassword) {
-            return res.status(401).json({ error: 'Invalid credentials' });
-        }
-
-        // Set session
-        req.session.userId = user.user_Id;
-        req.session.username = user.username;
-
-        res.json({
-            message: 'Login successful',
-            user: {
-                id: user.user_Id,
-                username: user.username,
-                email: user.email,
-                currency: user.currency
-            }
+app.use((req, res, next) => {
+    if (req.body) {
+        Object.keys(req.body).forEach(key => {
+            req.body[key] = sanitizeInput(req.body[key]);
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Server error' });
     }
+    next();
 });
+
+// CSRF token endpoint
+app.get('/api/csrf-token', (req, res) => {
+    res.json({ csrfToken: req.csrfToken() });
+});
+
+// Routes
+const authRoutes = require('./routes/auth')(dbInterface);
+app.use('/api', authRoutes);
 
 // Socket.io connection handling
 io.on('connection', (socket) => {
