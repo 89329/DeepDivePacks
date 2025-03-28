@@ -1,19 +1,21 @@
-// App.js
-
 import React from 'react';
-import Dock from './components/Dock'; // If Dock is in the components folder
-import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc';  // Assuming you use react-icons
+import Dock from './components/Dock'; // Dock-component importeren
+import { VscHome, VscArchive, VscAccount, VscSettingsGear } from 'react-icons/vsc'; // React icons voor de Dock
+import './App.css'; // Dit importeert je CSS-bestand
 
 function App() {
   const items = [
-    { icon: <VscHome size={18} />, label: 'Home', onClick: () => alert('Home!') },
-    { icon: <VscArchive size={18} />, label: 'Archive', onClick: () => alert('Archive!') },
-    { icon: <VscAccount size={18} />, label: 'Profile', onClick: () => alert('Profile!') },
-    { icon: <VscSettingsGear size={18} />, label: 'Settings', onClick: () => alert('Settings!') },
+    { icon: <VscHome size={30} />, label: '', onClick: () => alert('Home!') },
+    { icon: <VscArchive size={30} />, label: '', onClick: () => alert('Archive!') },
+    { icon: <VscAccount size={30} />, label: '', onClick: () => alert('Profile!') },
+    { icon: <VscSettingsGear size={30} />, label: '', onClick: () => alert('Settings!') },
   ];
 
   return (
+
+    
     <div>
+      {/* Header met top-bar en profiel icoon */}
       <header>
         <div className="top-bar">
           <button className="side-btn"></button> 
@@ -24,6 +26,7 @@ function App() {
         </div>
       </header>
 
+      {/* Main content met boxes */}
       <main className="content">
         <div className="large-box"></div>
         <div className="small-boxes">
@@ -32,7 +35,7 @@ function App() {
         </div>
       </main>
 
-      {/* Dock Component Below */}
+      {/* Dock component hier onderaan */}
       <Dock 
         items={items}
         panelHeight={68}

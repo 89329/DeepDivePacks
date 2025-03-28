@@ -1,6 +1,6 @@
-import React, { Children, useState, useRef, useEffect } from 'react';
+import React, { Children, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import './Dock.css';  // Don't forget to create and style Dock.css
+import './Dock.css';  // Zorg ervoor dat Dock.css bestaat
 import { cloneElement } from "react";
 
 function DockItem({ children, onClick, mouseX, spring, distance, magnification, baseItemSize }) {
