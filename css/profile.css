@@ -1247,3 +1247,332 @@ input.invalid-input {
 .hidden {
     display: none !important;
 }
+
+/* ===== RESPONSIVE STYLES ===== */
+@media (max-width: 1200px) {
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .profile-content {
+        padding: 2rem;
+    }
+
+    .username {
+        font-size: 2rem;
+    }
+
+    .profile-stats {
+        gap: 1rem;
+    }
+
+    .stat-item {
+        min-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .profile-content {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .profile-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .profile-title {
+        font-size: 1.6rem;
+    }
+
+    .profile-info {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+
+    .profile-avatar-container {
+        align-items: center;
+        width: 100%;
+    }
+
+    .edit-profile-btn {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .profile-avatar {
+        margin: 0 auto 1rem;
+    }
+
+    .profile-stats {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .stat-item {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .cards-count {
+        align-self: flex-start;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1rem;
+    }
+
+    .card-item {
+        height: 200px;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .modal-body {
+        max-height: 65vh;
+    }
+
+    .image-upload-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .image-preview-wrapper {
+        margin-bottom: 0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+
+    .fallback-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .fallback-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-container {
+        padding: 1rem 0.5rem;
+    }
+
+    .profile-content {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .profile-title {
+        font-size: 1.4rem;
+    }
+
+    .username {
+        font-size: 1.8rem;
+    }
+
+    .profile-info {
+        padding: 1rem;
+    }
+
+    .profile-avatar {
+        width: 150px;
+        height: 150px;
+    }
+
+    .avatar-placeholder {
+        width: 130px;
+        height: 130px;
+        font-size: 2.5rem;
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .stat-icon i {
+        font-size: 1.2rem;
+    }
+
+    .cards-collection {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .cards-collection h3 {
+        font-size: 1.3rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .card-item {
+        height: 180px;
+    }
+
+    .empty-collection {
+        padding: 2rem 1rem;
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .empty-collection h4 {
+        font-size: 1.2rem;
+    }
+
+    .profile-fallback {
+        padding: 2rem 1rem;
+    }
+
+    .fallback-title {
+        font-size: 1.5rem;
+    }
+
+    /* Modal refinements for very small screens */
+    .modal-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .url-input-wrapper {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .apply-url-btn {
+        width: 100%;
+    }
+
+    #image-preview {
+        width: 100px;
+        height: 100px;
+    }
+
+    /* Visibility toggle for small screens */
+    .visibility-options {
+        flex-direction: column;
+    }
+
+    .visibility-option {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .avatar-placeholder {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+    }
+
+    .card-item {
+        height: 150px;
+    }
+}
+
+/* Handle devices with notches or unusual dimensions */
+@supports (padding: max(0px)) {
+    .profile-container {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+}
+
+/* Support for high contrast mode */
+@media (prefers-contrast: high) {
+    .profile-content {
+        border: 2px solid #fff;
+    }
+
+    .profile-info,
+    .card-item,
+    .empty-collection,
+    .profile-fallback {
+        border: 1px solid #fff;
+    }
+}
+
+/* Support for reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .avatar-border {
+        animation: none;
+    }
+
+    .card-item:hover,
+    .stat-item:hover,
+    .fallback-button:hover,
+    .edit-profile-btn:hover,
+    .submit-btn:hover,
+    .cancel-btn:hover,
+    .upload-btn:hover,
+    .apply-url-btn:hover,
+    .remove-image-btn:hover {
+        transform: none;
+    }
+
+    .empty-collection {
+        animation: none;
+    }
+
+    .profile-content.loading::after {
+        animation: none;
+        background: var(--biolum-blue);
+    }
+}
