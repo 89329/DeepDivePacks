@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Knoppen links en rechts */
+    padding: 10px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 45%;
+    transform: translateX(-50%);
+}
+
+.profile-icon img {
+    width: 90px;
+    height: 55px;
+    object-fit: cover; /* Zorgt ervoor dat de afbeelding goed past */
+    border-radius: 90%; /* Maakt het rond als een profielicoon */
+}
+
+.side-btn {
+    width: 60px; /* Maak rechthoekig zoals in de afbeelding */
+    height: 30px;
+    background: lightgray;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 20px;
+}
+
+.gallery div {
+    width: 100%;
+    padding-top: 100%; 
+    background: lightgray;
+    border-radius: 5px;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background: white;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-btn.active {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
