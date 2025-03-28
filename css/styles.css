@@ -1,9 +1,11 @@
+/* Universele stijlen voor margin, padding en box-sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Algemene body stijlen */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -12,6 +14,7 @@ body {
     background: #f5f5f5;
 }
 
+/* Top-bar voor profiel en side-buttons */
 .top-bar {
     display: flex;
     align-items: center;
@@ -33,9 +36,10 @@ body {
 .profile-icon img {
     width: 90px;
     height: 55px;
-    object-fit: cover; 
-    border-radius: 90%; 
+    object-fit: cover;
+    border-radius: 50%;
 }
+
 .side-btn {
     width: 60px;
     height: 30px;
@@ -45,6 +49,7 @@ body {
     cursor: pointer;
 }
 
+/* Hoofdcontent stijlen */
 .content {
     display: flex;
     flex-direction: column;
@@ -75,6 +80,7 @@ body {
     border-radius: 10px;
 }
 
+/* Bottom navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -92,9 +98,144 @@ body {
     background: none;
     border: none;
     cursor: pointer;
+    position: relative;
+    transition: background 0.3s ease;
 }
 
 .nav-btn.active {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+}
+
+/* Dock - de panel en items */
+.dock-outer {
+    margin: 0 0.5rem;
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dock-panel {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: flex-end;
+    width: fit-content;
+    gap: 1rem;
+    border-radius: 1rem;
+    background-color: #060606;
+    border: 1px solid #222;
+    padding: 0 0.5rem 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.dock-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #060606;
+    border: 1px solid #222;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.dock-item:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Stijlen voor de iconen in de dock */
+.dock-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.dock-item:hover .dock-icon {
+    color: #ff9900; /* Verander kleur bij hover */
+}
+
+/* Dock label - wanneer een item wordt gehoverd */
+.dock-label {
+    position: absolute;
+    top: -1.5rem;
+    left: 50%;
+    width: fit-content;
+    white-space: pre;
+    border-radius: 0.375rem;
+    border: 1px solid #222;
+    background-color: #060606;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    color: #fff;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dock-item:hover .dock-label {
+    opacity: 1;
+}
+
+/* Algemene stijlen voor knoppen in de bottom-nav */
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+}
+
+/* Hover effecten voor nav-knoppen */
+.nav-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Eventuele extra stijlen voor het profiel icoon en knoppen in de top-bar */
+.profile-icon img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Responsiveness voor kleinere schermen */
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+    }
+
+    .large-box, .small-box {
+        width: 100%;
+    }
+
+    .dock-panel {
+        width: 100%;
+        padding: 0.25rem;
+    }
+
+    .dock-item {
+        width: 40px;
+        height: 40px;
+    }
 }
