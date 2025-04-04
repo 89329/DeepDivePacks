@@ -14,7 +14,6 @@ $options = [
 try {
     $pdo = new PDO("mysql:host=$servername;dbname=$database", $username, $password, $options);
 } catch (PDOException $e) {
-    // Dit toont de gedetailleerde foutmelding als de verbinding niet lukt
     die("Connection failed: " . $e->getMessage());
 }
 ?>
