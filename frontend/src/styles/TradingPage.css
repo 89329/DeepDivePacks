@@ -1,0 +1,160 @@
+.trading-page {
+  padding: 20px;
+  padding-bottom: calc(var(--nav-height) + 20px);
+}
+
+.trading-page h1 {
+  margin-bottom: 24px;
+  color: var(--text-color);
+}
+
+.trade-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.trades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trade-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trade-user {
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: var(--text-color);
+}
+
+.trade-cards {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.trade-arrow {
+  font-size: 24px;
+  color: #666;
+}
+
+.card-preview {
+  flex: 1;
+  aspect-ratio: 2/3;
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card-preview:hover {
+  transform: translateY(-2px);
+}
+
+.card-preview.selected {
+  border: 3px solid var(--primary-color);
+}
+
+.card-preview span {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.card-preview h3 {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.accept-btn, .create-trade-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accept-btn:hover, .create-trade-btn:hover {
+  background: var(--secondary-color);
+}
+
+.create-trade h2 {
+  margin-bottom: 20px;
+}
+
+.my-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.trade-preview {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trade-preview h3 {
+  margin-bottom: 16px;
+}
+
+.selected-cards {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* Reuse card type styles from CollectionPage.css */
+.card-preview.common {
+  background: linear-gradient(135deg, #e0e0e0, #f5f5f5);
+  color: #333;
+}
+
+.card-preview.rare {
+  background: linear-gradient(135deg, #4a6cf7, #6e8efb);
+}
+
+.card-preview.holographic {
+  background: linear-gradient(135deg, #ffd700, #ff69b4, #4a6cf7);
+  background-size: 400% 400%;
+  animation: holographic 3s ease infinite;
+} 

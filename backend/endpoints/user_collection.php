@@ -15,6 +15,6 @@ try {
 
     echo json_encode($cards);
 } catch (PDOException $e) {
-    echo json_encode(["error" => "Fout bij ophalen van collectie."]);
+    echo json_encode(["error" => "Error fetching collection."]);
 }
 ?>

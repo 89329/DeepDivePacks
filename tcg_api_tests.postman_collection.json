@@ -1,0 +1,112 @@
+{
+  "info": {
+    "_postman_id": "random-uuid",
+    "name": "Trading Card Game API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "User Collection",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/endpoints/user_collection.php?user_id=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["endpoints", "user_collection.php"],
+          "query": [
+            {
+              "key": "user_id",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Open Pack",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": 1,\n    \"collection_id\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/endpoints/open_pack.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["endpoints", "open_pack.php"]
+        }
+      }
+    },
+    {
+      "name": "Get Available Trades",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/endpoints/get_trades.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["endpoints", "get_trades.php"]
+        }
+      }
+    },
+    {
+      "name": "Create Trade",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": 1,\n    \"offering_card_id\": 1,\n    \"wanting_card_id\": 2\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/endpoints/create_trade.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["endpoints", "create_trade.php"]
+        }
+      }
+    },
+    {
+      "name": "Accept Trade",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"user_id\": 2,\n    \"trade_id\": 1\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/endpoints/accept_trade.php",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["endpoints", "accept_trade.php"]
+        }
+      }
+    }
+  ]
+} 
